@@ -1,9 +1,13 @@
 #include <gtest/gtest.h>
 
+#include <cstdlib>
+
+#include <algorithm>
 #include <functional>
 #include <iostream>
+#include <iterator>
 
-#include "rsq.h"
+#include "static_rsq.h"
 
 TEST(StaticRSQSimple, Sum) {
   int TEST_ARRAY[] = {1, 2, 3, 4, 5, 6};
@@ -33,6 +37,21 @@ TEST(StaticRSQSimple, Product) {
   ASSERT_EQ(720, rsq.RangeSum(0, SIZE));
 
   ASSERT_EQ(60, rsq.RangeSum(2, 5));
+}
+
+TEST(StaticRSQSimple, ConstructionFromInputIterator) {
+  std::istringstream in("1 2 3 4 5 6");
+  const size_t SIZE = 6;
+
+  StaticRSQ<int, std::plus<int>, std::minus<int> > rsq(
+      std::istream_iterator<int>(in), (std::istream_iterator<int>()));
+
+  ASSERT_EQ(1, rsq.RangeSum(0, 1));
+  ASSERT_EQ(6, rsq.RangeSum(SIZE - 1, SIZE));
+
+  ASSERT_EQ(21, rsq.RangeSum(0, SIZE));
+
+  ASSERT_EQ(12, rsq.RangeSum(2, 5));
 }
 
 class RangeRandomNumberGenerator {

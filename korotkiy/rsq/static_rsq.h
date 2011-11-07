@@ -1,7 +1,6 @@
 #ifndef _STATIC_RSQ_H_
 #define _STATIC_RSQ_H_
 
-#include <algorithm>
 #include <iterator>
 #include <numeric>
 #include <vector>
@@ -9,8 +8,18 @@
 template<class T, class BinaryOperator, class InverseOperator>
 class StaticRSQ {
  public:
-  template<class InputIterator>
-  StaticRSQ(InputIterator begin, InputIterator end) {
+  template<class Iterator, class IteratorTag>
+  void reserve(Iterator begin, Iterator end, IteratorTag) {
+    partial_sums_.reserve(std::distance(begin, end));
+  }
+
+  template<class Iterator>
+  void reserve(Iterator begin, Iterator end, std::input_iterator_tag) {}
+
+  template<class Iterator>
+  StaticRSQ(Iterator begin, Iterator end) {
+    reserve(begin, end,
+        typename std::iterator_traits<Iterator>::iterator_category());
     std::partial_sum(begin, end,
       std::back_inserter(partial_sums_),
       binary_operator_);
