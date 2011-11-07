@@ -1,5 +1,5 @@
-#ifndef _RSQ_H_
-#define _RSQ_H_
+#ifndef _STATIC_RSQ_H_
+#define _STATIC_RSQ_H_
 
 #include <algorithm>
 #include <iterator>
@@ -30,4 +30,4 @@ class StaticRSQ {
   std::vector<T> partial_sums_;
 };
 
-#endif  // _RSQ_H_
+#endif  // _STATIC_RSQ_H_
