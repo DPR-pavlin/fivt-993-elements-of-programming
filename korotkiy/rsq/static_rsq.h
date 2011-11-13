@@ -49,13 +49,21 @@ class StaticRSQ {
   }
 
   void PushBack(const T& element) {
-    partial_sums_.push_back(binary_operator_(partial_sums_.back(), element));
+    if (!partial_sums_.empty()) {
+      partial_sums_.push_back(binary_operator_(partial_sums_.back(), element));
+    } else {
+      partial_sums_.push_back(element);
+    }
   }
 
   void PopBack() {
     assert(!partial_sums_.empty());
 
     partial_sums_.pop_back();
+  }
+
+  size_t Size() const {
+    return partial_sums_.size();
   }
 
  private:
