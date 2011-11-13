@@ -13,7 +13,7 @@ TEST(StaticRSQSimple, Sum) {
   int TEST_ARRAY[] = {1, 2, 3, 4, 5, 6};
   size_t SIZE = sizeof(TEST_ARRAY) / sizeof(TEST_ARRAY[0]);
 
-  StaticRSQ<int, std::plus<int>, std::minus<int> > rsq(
+  StaticRSQ<int, std::plus<int> > rsq(
       TEST_ARRAY, TEST_ARRAY + SIZE);
 
   ASSERT_EQ(1, rsq.RangeSum(0, 1));
@@ -28,7 +28,7 @@ TEST(StaticRSQSimple, Product) {
   int TEST_ARRAY[] = {1, 2, 3, 4, 5, 6};
   size_t SIZE = sizeof(TEST_ARRAY) / sizeof(TEST_ARRAY[0]);
 
-  StaticRSQ<int, std::multiplies<int>, std::divides<int> > rsq(
+  StaticRSQ<int, std::multiplies<int> > rsq(
       TEST_ARRAY, TEST_ARRAY + SIZE);
 
   ASSERT_EQ(1, rsq.RangeSum(0, 1));
@@ -43,7 +43,7 @@ TEST(StaticRSQSimple, ConstructionFromInputIterator) {
   std::istringstream in("1 2 3 4 5 6");
   const size_t SIZE = 6;
 
-  StaticRSQ<int, std::plus<int>, std::minus<int> > rsq(
+  StaticRSQ<int> rsq(
       std::istream_iterator<int>(in), (std::istream_iterator<int>()));
 
   ASSERT_EQ(1, rsq.RangeSum(0, 1));
@@ -73,7 +73,7 @@ TEST(StaticRSQStress, Product) {
   std::generate_n(std::back_inserter(test_data), TEST_SIZE,
                   RangeRandomNumberGenerator(1, 9));
 
-  StaticRSQ<int, std::multiplies<int>, std::divides<int> > rsq(
+  StaticRSQ<int, std::multiplies<int> > rsq(
       test_data.begin(), test_data.end());
 
   for (int from = 0; from < TEST_SIZE; ++from) {

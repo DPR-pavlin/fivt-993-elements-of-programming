@@ -8,6 +8,7 @@ set (SOURCES
 
 set (TESTS
   rsq_unittest.cc
+  safe_distance_unittest.cc
 )
 
 add_executable (unittests
