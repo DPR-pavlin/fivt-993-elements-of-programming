@@ -38,7 +38,6 @@ class StaticRSQ {
 
   T RangeSum(size_t from, size_t to) const {
     assert(from < to);
-    assert(0 <= from);
     assert(to <= partial_sums_.size());
 
     if (from > 0) {
