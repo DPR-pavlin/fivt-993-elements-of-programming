@@ -21,22 +21,22 @@ TEST(find_element_with_any_advice, simple_random) {
 	for (int i=0; i<ARR_SIZE; i++)
 		arr[i] = std::rand() % ARR_SIZE;
 	
-	std::sort(&arr[0], arr + ARR_SIZE);
+	std::sort(arr, arr + ARR_SIZE);
 
 	for (int i=0; i<ARR_SIZE; i++)
 		for (int j=0; j<ARR_SIZE; j++)
-			ASSERT_EQ(*Find(&arr[0], arr+ARR_SIZE, arr+j, arr[i]), arr[i]);
+			ASSERT_EQ(*Find(arr, arr+ARR_SIZE, arr+j, arr[i]), arr[i]);
 }
 
 TEST(find_element_with_any_advice, finds_element_with_different_comparator) {
 	for (int i=0; i<ARR_SIZE; i++)
 		arr[i] = std::rand() % ARR_SIZE;
 
-	std::sort(&arr[0], arr + ARR_SIZE, std::greater<int>());
+	std::sort(arr, arr + ARR_SIZE, std::greater<int>());
 
 	for (int i=0; i<ARR_SIZE; i++)
 		for (int j=0; j<ARR_SIZE; j++) {
-			ASSERT_EQ(*Find(&arr[0], arr+ARR_SIZE, arr+j, arr[i], std::greater<int>()), arr[i]);
+			ASSERT_EQ(*Find(arr, arr+ARR_SIZE, arr+j, arr[i], std::greater<int>()), arr[i]);
 		}
 }
 
@@ -44,18 +44,18 @@ TEST(find_element_with_any_advice, different_comparator_different_interval_1) {
 	for (int i=0; i<ARR_SIZE; i++)
 		arr[i] = std::rand() % ARR_SIZE;
 
-	std::sort(&arr[0], arr + ARR_SIZE, std::greater<int>());
+	std::sort(arr, arr + ARR_SIZE, std::greater<int>());
 
 	for (int i=0; i<ARR_SIZE/2; i++)
 		for (int j=0; j<ARR_SIZE/2; j++)
-			ASSERT_EQ(*Find(&arr[0], arr+ARR_SIZE/2, arr+j, arr[i], std::greater<int>()), arr[i]);
+			ASSERT_EQ(*Find(arr, arr+ARR_SIZE/2, arr+j, arr[i], std::greater<int>()), arr[i]);
 }
 
 TEST(find_element_with_any_advice, different_interval) {
 	for (int i=0; i<ARR_SIZE; i++)
 		arr[i] = std::rand() % ARR_SIZE;
 
-	std::sort(&arr[0], arr + ARR_SIZE);
+	std::sort(arr, arr + ARR_SIZE);
 
 	for (int i=ARR_SIZE/2; i<ARR_SIZE; i++)
 		for (int j=ARR_SIZE/2; j<ARR_SIZE; j++)
@@ -66,7 +66,7 @@ TEST(find_element_with_any_advice, different_comparator_different_interval_2) {
 	for (int i=0; i<ARR_SIZE; i++)
 		arr[i] = std::rand() % ARR_SIZE;
 
-	std::sort(&arr[0], arr + ARR_SIZE, std::greater<int>());
+	std::sort(arr, arr + ARR_SIZE, std::greater<int>());
 
 	for (int i=ARR_SIZE/4; i<ARR_SIZE/2; i++)
 		for (int j=ARR_SIZE/4; j<ARR_SIZE/2; j++)
@@ -80,24 +80,24 @@ TEST(no_such_element_present, even_and_odd) {
 	for (int i=0; i<ARR_SIZE; i++)
 		arr[i] = 2 * (std::rand() % ARR_SIZE);
 
-	std::sort(&arr[0], arr + ARR_SIZE);
+	std::sort(arr, arr + ARR_SIZE);
 
 	for (int i=0; i<ARR_SIZE; i++)
 		for (int j=0; j<ARR_SIZE; j++)
-			ASSERT_EQ(Find(&arr[0], arr+ARR_SIZE, arr+j, 2*i + 1), arr+ARR_SIZE);
+			ASSERT_EQ(Find(arr, arr+ARR_SIZE, arr+j, 2*i + 1), arr+ARR_SIZE);
 }
 
 TEST(no_such_element_present, out_of_search_range_1) {
 	for (int i=0; i<ARR_SIZE; i++)
 		arr[i] = (std::rand() % ARR_SIZE);
 
-	std::sort(&arr[0], arr + ARR_SIZE);
+	std::sort(arr, arr + ARR_SIZE);
 
 	int i= ARR_SIZE/2;
 	for (; i<ARR_SIZE; i++)
 		if (arr[i] != arr[i-1]) break;
 
-	ASSERT_EQ(Find(&arr[0], arr+i, arr+i/2, arr[i]), arr+i);
+	ASSERT_EQ(Find(arr, arr+i, arr+i/2, arr[i]), arr+i);
 }
 
 TEST(edges, zero_sized) {
@@ -130,6 +130,6 @@ TEST(edges, wrong_border_but_correct_advice_1) {
 }
 
 TEST(edges, wrong_border_but_correct_advice_2) {
-	ASSERT_EQ(*Find(arr-ARR_SIZE/4, arr+ARR_SIZE, &arr[0], arr[ARR_SIZE/2]), arr[ARR_SIZE/2]);
+	ASSERT_EQ(*Find(arr-ARR_SIZE/4, arr+ARR_SIZE, arr, arr[ARR_SIZE/2]), arr[ARR_SIZE/2]);
 }
 
