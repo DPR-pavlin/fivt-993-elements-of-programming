@@ -6,7 +6,7 @@
 #include <functional>
 #include <vector>
 
-const int ARR_SIZE = 1000;
+const int ARR_SIZE = 3000;
 const int SRAND_INIT = 12345;
 int arr[ARR_SIZE];
 

@@ -1,6 +1,5 @@
 #include <functional>
 #include <algorithm>
-#include <iterator_traits>
 
 
 template<class Iterator, class T, class Comparator>
@@ -18,7 +17,7 @@ Iterator Find(Iterator begin, Iterator end, Iterator advice, const T& element, C
 	Iterator next_it( advice );
 	
 	int sign = cmp? -1 : 1;
-	std::difference_type step = 1;
+	int step = 1;
 	
 	
 	while (sign * (limit - next_it) >= 1 && cmp == compare( element, *next_it )) {
