@@ -1,0 +1,3 @@
+* HOW TO BUILD THIS SHIT  
+  mkdir build && cd build && cmake .. && make
+
