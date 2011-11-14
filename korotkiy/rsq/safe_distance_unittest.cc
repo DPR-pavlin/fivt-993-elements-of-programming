@@ -6,24 +6,28 @@
 
 #include "safe_distance.h"
 
-TEST(DistanceLowerBound, VectorIterators) {
+namespace stlext {
+
+TEST(safe_distance, vector_iterators) {
   const int LENGTH = 100;
   std::vector<int> test_vector(LENGTH, 0);
 
-  ASSERT_EQ(LENGTH, SafeDistance(test_vector.begin(), test_vector.end()));
+  ASSERT_EQ(LENGTH, safe_distance(test_vector.begin(), test_vector.end()));
 }
 
-TEST(DistanceLowerBound, ListIterators) {
+TEST(safe_distance, list_iterators) {
   const int LENGTH = 100;
   std::list<int> test_list(LENGTH, 0);
 
-  ASSERT_EQ(LENGTH, SafeDistance(test_list.begin(), test_list.end()));
+  ASSERT_EQ(LENGTH, safe_distance(test_list.begin(), test_list.end()));
 }
 
-TEST(DistanceLowerBound, InputIterators) {
+TEST(safe_distance, input_iterators) {
   std::istringstream stream("1 2 3 4 5");
 
-  ASSERT_EQ(0, SafeDistance(
+  ASSERT_EQ(0, safe_distance(
       std::istream_iterator<int>(stream),
       (std::istream_iterator<int>())));
+}
+
 }

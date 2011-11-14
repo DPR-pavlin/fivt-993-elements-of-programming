@@ -16,6 +16,10 @@ add_executable (unittests
   ${TESTS}
 )
 
+#set_target_properties(unittests PROPERTIES
+#  COMPILE_FLAGS -std=c++0x
+#)
+
 target_link_libraries (
   unittests
   libgtest.so

@@ -3,10 +3,11 @@
 
 #include <iterator>
 
+namespace stlext {
+
 template<class Iterator,
          class IteratorCategory>
-class DistanceLowerBound {
- public:
+struct safe_distance_t {
   typename std::iterator_traits<Iterator>::difference_type
   operator() (Iterator begin, Iterator end) const {
     return std::distance(begin, end);
@@ -14,8 +15,7 @@ class DistanceLowerBound {
 };
 
 template<class Iterator>
-class DistanceLowerBound<Iterator, std::input_iterator_tag> {
- public:
+struct safe_distance_t<Iterator, std::input_iterator_tag> {
   typename std::iterator_traits<Iterator>::difference_type
   operator() (Iterator begin, Iterator end) const {
     return 0;
@@ -24,10 +24,12 @@ class DistanceLowerBound<Iterator, std::input_iterator_tag> {
 
 template<class Iterator>
 typename std::iterator_traits<Iterator>::difference_type
-SafeDistance(Iterator begin, Iterator end) {
-  return DistanceLowerBound<Iterator,
+safe_distance(Iterator begin, Iterator end) {
+  return safe_distance_t<Iterator,
       typename std::iterator_traits<Iterator>::iterator_category>()
           (begin, end);
+}
+
 }
 
 #endif  // _SAFE_DISTANCE_H_

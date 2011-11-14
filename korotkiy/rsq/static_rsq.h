@@ -9,38 +9,41 @@
 
 #include "safe_distance.h"
 
+namespace stlext {
+
 template<class BinaryOperator>
-struct Inverse;
+struct inverse;
 
 template<class T>
-struct Inverse<std::plus<T> > {
+struct inverse<std::plus<T> > {
   typedef std::minus<T> value;
 };
 
 template<class T>
-struct Inverse<std::multiplies<T> > {
+struct inverse<std::multiplies<T> > {
   typedef std::divides<T> value;
 };
 
 template<class T,
          class BinaryOperator = std::plus<T>,
-         class InverseOperator = typename Inverse<BinaryOperator>::value>
-class StaticRSQ {
+         class InverseOperator = typename inverse<BinaryOperator>::value>
+class static_rsq {
  public:
   template<class Iterator>
-  StaticRSQ(Iterator begin, Iterator end,
-            const BinaryOperator& binary_operator = BinaryOperator(),
-            const InverseOperator& inverse_operator = InverseOperator())
+  static_rsq(Iterator begin, Iterator end,
+             const BinaryOperator& binary_operator,
+             const InverseOperator& inverse_operator)
       : binary_operator_(binary_operator),
         inverse_operator_(inverse_operator) {
-    partial_sums_.reserve(SafeDistance(begin, end));
-
-    std::partial_sum(begin, end,
-      std::back_inserter(partial_sums_),
-      binary_operator_);
+    init(begin, end);
   }
 
-  T RangeSum(size_t from, size_t to) const {
+  template<class Iterator>
+  static_rsq(Iterator begin, Iterator end) {
+    init(begin, end);
+  }
+
+  T range_sum(size_t from, size_t to) const {
     assert(from < to);
     assert(to <= partial_sums_.size());
 
@@ -51,7 +54,7 @@ class StaticRSQ {
     }
   }
 
-  void PushBack(const T& element) {
+  void push_back(const T& element) {
     if (!partial_sums_.empty()) {
       partial_sums_.push_back(binary_operator_(partial_sums_.back(), element));
     } else {
@@ -59,13 +62,13 @@ class StaticRSQ {
     }
   }
 
-  void PopBack() {
+  void pop_back() {
     assert(!partial_sums_.empty());
 
     partial_sums_.pop_back();
   }
 
-  size_t Size() const {
+  size_t size() const {
     return partial_sums_.size();
   }
 
@@ -73,6 +76,17 @@ class StaticRSQ {
   BinaryOperator binary_operator_;
   InverseOperator inverse_operator_;
   std::vector<T> partial_sums_;
+
+  template<class Iterator>
+  void init(Iterator begin, Iterator end) {
+    partial_sums_.reserve(safe_distance(begin, end));
+
+    std::partial_sum(begin, end,
+      std::back_inserter(partial_sums_),
+      binary_operator_);
+  }
 };
+
+}
 
 #endif  // _STATIC_RSQ_H_
