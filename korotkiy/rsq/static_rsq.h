@@ -9,18 +9,18 @@
 
 #include "safe_distance.h"
 
-template<class T, class BinaryOperator>
+template<class BinaryOperator>
 class Inverse;
 
 template<class T>
-class Inverse<T, std::plus<T> > : public std::minus<T> {};
+class Inverse<std::plus<T> > : public std::minus<T> {};
 
 template<class T>
-class Inverse<T, std::multiplies<T> > : public std::divides<T> {};
+class Inverse<std::multiplies<T> > : public std::divides<T> {};
 
 template<class T,
          class BinaryOperator = std::plus<T>,
-         class InverseOperator = Inverse<T, BinaryOperator> >
+         class InverseOperator = Inverse<BinaryOperator> >
 class StaticRSQ {
  public:
   template<class Iterator>
