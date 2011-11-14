@@ -7,10 +7,8 @@ template<class Iterator,
          class IteratorCategory>
 class DistanceLowerBound {
  public:
-  typedef typename std::iterator_traits<Iterator>::difference_type
-          DifferenceType;
-
-  DifferenceType operator() (Iterator begin, Iterator end) {
+  typename std::iterator_traits<Iterator>::difference_type
+  operator() (Iterator begin, Iterator end) const {
     return std::distance(begin, end);
   }
 };
@@ -18,17 +16,15 @@ class DistanceLowerBound {
 template<class Iterator>
 class DistanceLowerBound<Iterator, std::input_iterator_tag> {
  public:
-  typedef typename std::iterator_traits<Iterator>::difference_type
-          DifferenceType;
-
-  DifferenceType operator() (Iterator begin, Iterator end) {
+  typename std::iterator_traits<Iterator>::difference_type
+  operator() (Iterator begin, Iterator end) const {
     return 0;
   }
 };
 
 template<class Iterator>
 typename std::iterator_traits<Iterator>::difference_type
-    SafeDistance(Iterator begin, Iterator end) {
+SafeDistance(Iterator begin, Iterator end) {
   return DistanceLowerBound<Iterator,
       typename std::iterator_traits<Iterator>::iterator_category>()
           (begin, end);

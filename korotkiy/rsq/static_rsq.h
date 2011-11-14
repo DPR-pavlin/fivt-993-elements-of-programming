@@ -10,17 +10,21 @@
 #include "safe_distance.h"
 
 template<class BinaryOperator>
-class Inverse;
+struct Inverse;
 
 template<class T>
-class Inverse<std::plus<T> > : public std::minus<T> {};
+struct Inverse<std::plus<T> > {
+  typedef std::minus<T> value;
+};
 
 template<class T>
-class Inverse<std::multiplies<T> > : public std::divides<T> {};
+struct Inverse<std::multiplies<T> > {
+  typedef std::divides<T> value;
+};
 
 template<class T,
          class BinaryOperator = std::plus<T>,
-         class InverseOperator = Inverse<BinaryOperator> >
+         class InverseOperator = typename Inverse<BinaryOperator>::value>
 class StaticRSQ {
  public:
   template<class Iterator>
