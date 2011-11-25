@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 include_directories(${CMAKE_SOURCE_DIR}/stlext)
 
 set (TESTS
-  static_rsq_test.cc
-  safe_distance_test.cc
+  static_rmq_test.cc
 )
 
 add_executable (unittests
