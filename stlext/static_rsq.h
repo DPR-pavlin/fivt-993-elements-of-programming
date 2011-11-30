@@ -87,6 +87,6 @@ class static_rsq {
   }
 };
 
-}
+}  // namespace stlext
 
 #endif  // _STATIC_RSQ_H_

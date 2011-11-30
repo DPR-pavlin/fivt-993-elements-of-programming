@@ -30,6 +30,6 @@ safe_distance(Iterator begin, Iterator end) {
           (begin, end);
 }
 
-}
+}  // namespace stlext
 
 #endif  // _SAFE_DISTANCE_H_
