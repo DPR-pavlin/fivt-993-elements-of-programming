@@ -8,12 +8,10 @@
 namespace stlext {
 
 
-
-
 TEST(integer_part_of_log, check){
-	for (size_t i=1; i<100000000; i++ ){
+	for (size_t i = 1; i < 100000000; i++ ){
 		ASSERT_EQ(integer_part_of_log2(i), ilogb(i));
-		// for bit size_t ilogb work uncorrectly
+		// for big size_t ilogb work uncorrectly
 	}
 }
 
