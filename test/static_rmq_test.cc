@@ -13,6 +13,17 @@ namespace stlext {
 
 struct gcd {
 
+	gcd(int a)
+	:fictive(a)
+	{
+	}
+
+	gcd()
+	{
+	}
+
+	int fictive;
+
 	int operator() (int a, int b) {
 		while (b) {
 			a %= b;
@@ -22,7 +33,28 @@ struct gcd {
 	}
 };
 
-TEST(static_range_idempotent_query_simple1, min) {
+
+struct comparator_with_costructor{
+
+	comparator_with_costructor(int a)
+	:fictive(a)
+	{
+	}
+
+	int operator() (const int& a, const int& b) const{
+		if (a < b) {
+			return a;
+		} else {
+			return b;
+		}
+	}
+
+	int fictive;
+
+};
+
+
+TEST(static_range_idempotent_query_simple, min) {
 	int TEST_ARRAY[] = {1, 2, 3, 4, 5, 6};
 	size_t SIZE = sizeof(TEST_ARRAY) / sizeof(TEST_ARRAY[0]);
 
@@ -37,7 +69,7 @@ TEST(static_range_idempotent_query_simple1, min) {
 
 }
 
-TEST(static_range_idempotent_query_simple1, gcd) {
+TEST(static_range_idempotent_query_simple, gcd) {
 	int TEST_ARRAY[] = {1, 2, 4, 8, 6, 9};
 	size_t SIZE = sizeof(TEST_ARRAY) / sizeof(TEST_ARRAY[0]);
 
@@ -52,7 +84,22 @@ TEST(static_range_idempotent_query_simple1, gcd) {
 
 }
 
-TEST(static_rmq_simple1, less) {
+TEST(static_range_idempotent_query_simple, gcd_with_constructor) {
+	int TEST_ARRAY[] = {1, 2, 4, 8, 6, 9};
+	size_t SIZE = sizeof(TEST_ARRAY) / sizeof(TEST_ARRAY[0]);
+
+
+	static_range_idempotent_query<int, gcd > rmq(TEST_ARRAY, TEST_ARRAY + SIZE, gcd(0));
+
+
+	ASSERT_EQ(1, rmq.query(0, 1));
+	ASSERT_EQ(2, rmq.query(1, 5));
+	ASSERT_EQ(3, rmq.query(4, 6));
+
+
+}
+
+TEST(static_rmq_simple, less) {
 	int TEST_ARRAY[] = {1, 2, 3, 4, 5, 6};
 	size_t SIZE = sizeof(TEST_ARRAY) / sizeof(TEST_ARRAY[0]);
 
@@ -64,11 +111,25 @@ TEST(static_rmq_simple1, less) {
 	ASSERT_EQ(2, rmq.query(1, 4));
 	ASSERT_EQ(3, rmq.query(2, 6));
 
+}
+
+TEST(static_rmq_simple, comparator_with_contructor) {
+	int TEST_ARRAY[] = {1, 2, 3, 4, 5, 6};
+	size_t SIZE = sizeof(TEST_ARRAY) / sizeof(TEST_ARRAY[0]);
+
+
+	static_rmq<int, comparator_with_costructor> rmq(TEST_ARRAY,
+			TEST_ARRAY + SIZE,
+			comparator_with_costructor(0));
+
+
+	ASSERT_EQ(1, rmq.query(0, 1));
+	ASSERT_EQ(2, rmq.query(1, 4));
+	ASSERT_EQ(3, rmq.query(2, 6));
 
 }
 
-
-TEST(static_rmq_simple1, construction_from_input_iterator) {
+TEST(static_rmq_simple, construction_from_input_iterator) {
 	std::istringstream in("1 2 3 4 5 6");
 	const size_t SIZE = 6;
 
@@ -81,24 +142,7 @@ TEST(static_rmq_simple1, construction_from_input_iterator) {
 }
 
 
-TEST(static_rmq_simple2, less) {
-	int TEST_ARRAY[] = {6, 3, 5, 10, 11, 1, 4, 9};
-	size_t SIZE = sizeof(TEST_ARRAY) / sizeof(TEST_ARRAY[0]);
-
-
-	static_rmq<int> rmq(TEST_ARRAY, TEST_ARRAY + SIZE);
-
-
-	ASSERT_EQ(3, rmq.query(0, 3));
-	ASSERT_EQ(3, rmq.query(1, 5));
-	ASSERT_EQ(1, rmq.query(5, 7));
-	ASSERT_EQ(1, rmq.query(2, 6));
-	ASSERT_EQ(1, rmq.query(0, 8));
-	ASSERT_EQ(1, rmq.query(3, 8));
-
-}
-
-TEST(static_rmq_simple2, greater) {
+TEST(static_rmq_simple, greater) {
 	int TEST_ARRAY[] = {6, 3, 5, 10, 11, 1, 4, 9};
 	size_t SIZE = sizeof(TEST_ARRAY) / sizeof(TEST_ARRAY[0]);
 

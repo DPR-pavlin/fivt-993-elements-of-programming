@@ -118,7 +118,18 @@ public:
 	template<class Iterator>
 	static_rmq(Iterator begin, Iterator end)
 	:static_range_idempotent_query<T, min<T, Comparator> > (begin, end)
-	{}
+	{
+	}
+
+	template<class Iterator>
+	static_rmq(Iterator begin, Iterator end,
+				 const Comparator& cmp)
+				 :static_range_idempotent_query<T, min<T, Comparator> > (begin,
+						 end,
+						 min<T, Comparator>(cmp) )
+	{
+	}
+
 
 };
 
