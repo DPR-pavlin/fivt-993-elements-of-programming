@@ -4,9 +4,8 @@ include_directories(${CMAKE_SOURCE_DIR}/stlext)
 
 
 set (TESTS
-	#integer_part_of_log2_test.cc
- 	static_rmq_test.cc
-
+  integer_part_of_log2_test.cc
+  static_rmq_test.cc
 )
 
 add_executable (unittests
@@ -17,7 +16,6 @@ add_executable (unittests
 
 target_link_libraries (
   unittests
-  STLEXT
   gtest
   gtest_main
   pthread
