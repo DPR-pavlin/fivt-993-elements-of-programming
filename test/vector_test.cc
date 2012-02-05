@@ -76,3 +76,35 @@ TEST(Vector, RandomAccess) {
     ASSERT_TRUE(is_vectors_equal(our_vector, stl_vector));
   }
 }
+
+TEST(Vector, Persistence) {
+  const int VECTOR_SIZE = 50,
+            NUMBER_OF_OPERATIONS = 1000,
+            COPYING_FREQUENCY = 10;
+
+  stlext::vector<int> our_vector, copy_of_our_vector;
+  std::vector<int> stl_vector, copy_of_stl_vector;
+
+  for (int i = 0; i < VECTOR_SIZE; ++i) {
+    our_vector.push_back(i);
+    stl_vector.push_back(i);
+
+    ASSERT_TRUE(is_vectors_equal(our_vector, stl_vector));
+  }
+
+  for (int i = 0; i < NUMBER_OF_OPERATIONS; ++i) {
+    if (0 == i % COPYING_FREQUENCY) {
+      copy_of_our_vector = our_vector;
+      copy_of_stl_vector = stl_vector;
+    }
+
+    size_t index = std::rand() % VECTOR_SIZE,
+           value = std::rand();
+
+    our_vector[index] = value;
+    stl_vector[index] = value;
+
+    ASSERT_TRUE(is_vectors_equal(copy_of_our_vector,
+                                 copy_of_stl_vector));
+  }
+}
