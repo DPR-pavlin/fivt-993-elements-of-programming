@@ -84,6 +84,16 @@ class vector {
     return size_;
   }
 
+  size_t capacity() const {
+    return capacity_;
+  }
+
+  void reserve(size_t ) {}
+
+  bool empty() const {
+    return 0 == size_;
+  }
+
  private:
   shared_ptr<const node_base> root_;
   size_t size_, height_, capacity_;
