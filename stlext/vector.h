@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cassert>
+#include <stdexcept>
 
 #include <boost/make_shared.hpp>
 #include <boost/smart_ptr.hpp>
@@ -13,8 +14,8 @@ using boost::shared_ptr;
 using boost::static_pointer_cast;
 using boost::make_shared;
 
-static const size_t ARITY = 2,
-                    LOG_ARITY = 1,
+static const size_t ARITY = 8,
+                    LOG_ARITY = 3,
                     ARITY_MASK = (1 << LOG_ARITY) - 1;
 
 template<class T>
@@ -80,6 +81,22 @@ class vector {
     return element_reference(this, index);
   }
 
+  const T& at(size_t index) const {
+    if (index >= size_) {
+      throw std::out_of_range();
+    }
+
+    return (*this)[index];
+  }
+
+  element_reference at(size_t index) {
+    if (index >= size_) {
+      throw std::out_of_range();
+    }
+
+    return (*this)[index];
+  }
+
   size_t size() const {
     return size_;
   }
@@ -92,6 +109,12 @@ class vector {
 
   bool empty() const {
     return 0 == size_;
+  }
+
+  void clear() {
+    size_ = 0;
+
+    tune_height();
   }
 
  private:
@@ -183,10 +206,7 @@ class vector {
   }
 
   size_t child_index(size_t index, size_t height) const {
-//    std::cerr << "[i: " << index << ", h: " << height
-//              << ", c: " << ((index >> (height - 1)) & ARITY_MASK)
-//              << "]" << std::endl;
-    return (index >> (height - 1)) & ARITY_MASK;
+    return (index >> ((height - 1) * LOG_ARITY)) & ARITY_MASK;
   }
 
   template<class NodeType>
