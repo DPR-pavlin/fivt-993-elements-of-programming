@@ -122,5 +122,7 @@ TEST(Vector, PopBack) {
     ASSERT_EQ(i, vector[i]);
 
     vector.pop_back();
+
+    ASSERT_EQ(i, vector.size());
   }
 }
