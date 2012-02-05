@@ -4,7 +4,7 @@
 #include <list>
 #include <sstream>
 
-#include "safe_distance.h"
+#include "stlext/safe_distance.h"
 
 namespace stlext {
 

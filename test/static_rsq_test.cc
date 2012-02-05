@@ -2,14 +2,12 @@
 
 #include <cstdlib>
 
-#include <iostream>
-
 #include <algorithm>
 #include <functional>
 #include <iostream>
 #include <iterator>
 
-#include "static_rsq.h"
+#include "stlext/static_rsq.h"
 
 namespace stlext {
 

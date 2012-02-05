@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 
-include_directories(${CMAKE_SOURCE_DIR}/stlext)
+include_directories(${CMAKE_SOURCE_DIR})
 
 set (TESTS
   static_rsq_test.cc
   safe_distance_test.cc
+  vector_test.cc
 )
 
 add_executable (unittests
