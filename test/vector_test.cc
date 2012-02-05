@@ -108,3 +108,19 @@ TEST(Vector, Persistence) {
                                  copy_of_stl_vector));
   }
 }
+
+TEST(Vector, PopBack) {
+  const int TEST_SIZE = 100;
+
+  stlext::vector<int> vector;
+
+  for (int i = 0; i < TEST_SIZE; ++i) {
+    vector.push_back(i);
+  }
+
+  for (int i = TEST_SIZE - 1; i >= 0; --i) {
+    ASSERT_EQ(i, vector[i]);
+
+    vector.pop_back();
+  }
+}

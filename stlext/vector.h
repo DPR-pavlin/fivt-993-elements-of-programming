@@ -55,11 +55,17 @@ class vector {
   vector() : size_(0), height_(0), capacity_(0) {}
 
   void push_back(const T& element) {
-    if (++size_ > capacity_) {
-      increase_height();
-    }
+    ++size_;
+
+    tune_height();
 
     insert(size_ - 1, element);
+  }
+
+  void pop_back() {
+    --size_;
+
+    tune_height();
   }
 
   const T& operator[] (size_t index) const {
@@ -84,6 +90,16 @@ class vector {
 
   friend class element_reference;
 
+  void tune_height() {
+    while (size_ > capacity_) {
+      increase_height();
+    }
+
+    while (size_ * ARITY < capacity_) {
+      decrease_height();
+    }
+  }
+
   void increase_height() {
     if (0 == height_) {
       root_ = make_shared<const leaf_node>();
@@ -100,6 +116,22 @@ class vector {
       capacity_ *= ARITY;
     } else {
       capacity_ = ARITY;
+    }
+  }
+
+  void decrease_height() {
+    if (1 == height_) {
+      root_.reset();
+    } else {
+      root_ = static_pointer_cast<const internal_node>(root_)->childs[0];
+    }
+
+    --height_;
+
+    if (0 != height_) {
+      capacity_ /= ARITY;
+    } else {
+      capacity_ = 0;
     }
   }
 
