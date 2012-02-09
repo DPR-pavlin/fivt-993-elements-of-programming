@@ -12,33 +12,33 @@ struct node {
   typedef std::shared_ptr<node<T> > node_ptr;
 
   ~node(){
-    std::cout << "delete node value =" << value_ << std::endl;
+    //std::cout << "delete node value =" << value_ << std::endl;
   }
 
   explicit node(T value)
     : value_(value) {
-    std::cout << "new node value =" << value_ << std::endl;
+    //std::cout << "new node value =" << value_ << std::endl;
   }
 
   node(T value, node_ptr left, node_ptr right)
     : value_(value) {
     child_[0] = left;
     child_[1] = right;
-    std::cout << "new node value =" << value_ << std::endl;
+    //std::cout << "new node value =" << value_ << std::endl;
   }
 
   explicit node(node_ptr base_node)
     : value_(base_node->value()) {
     child_[0] = base_node->child_[0];
     child_[1] = base_node->child_[1];
-    std::cout << "new node value =" << value_ << std::endl;
+    //std::cout << "new node value =" << value_ << std::endl;
   }
 
   node(node_ptr base_node, T value)
     : value_(value){
     child_[0] = base_node->child_[0];
     child_[1] = base_node->child_[1];
-    std::cout << "new node value =" << value_ << std::endl;
+    //std::cout << "new node value =" << value_ << std::endl;
   }
 
   T value() {
@@ -64,6 +64,17 @@ class persistent_heap {
 
   persistent_heap()
     : root_(NULL), size_(0), top_size_(0) {
+  }
+
+  persistent_heap(const persistent_heap<T, Comparator> &base_heap)
+    : root_(base_heap.root_), size_(base_heap.size_),
+      top_size_(base_heap.top_size_) {
+  }
+
+  void operator = (const persistent_heap<T, Comparator> &base_heap){
+    root_ = base_heap.root_;
+    size_ = base_heap.size_;
+    top_size_ = base_heap.top_size_;
   }
 
   void push(T value) {
@@ -99,7 +110,21 @@ class persistent_heap {
     }
   }
 
+  void root(){
+    std::cout << "root " <<root_->value() << std::endl;
+    std::cout << "size " <<size_ << std::endl;
+    std::cout << "top " <<top_size_ << std::endl;
+    if (root_->child_[0] != NULL) {
+      std::cout << "left " <<root_->child_[0]->value() << std::endl;
+    }
+
+    if (root_->child_[1] != NULL) {
+      std::cout << "right " << root_->child_[1]->value() << std::endl;
+    }
+  }
+
   T pop(){
+
     assert(!empty());
     T result = minimum();
     if (size_ == 1) {
@@ -111,6 +136,7 @@ class persistent_heap {
         top_size_ >>= 1;
       }
       size_--;
+      root_.reset(new node<T>(root_));
       router pop_router(root_, size_, top_size_);
       while (!pop_router.end_of_routing()) {
         pop_router.parent()->child_[pop_router.child_no()].reset(
@@ -164,7 +190,7 @@ class persistent_heap {
     return (root_)->value();
   }
 
- private:
+ protected:
 
   Comparator cmp_;
   node_ptr root_;
