@@ -73,7 +73,7 @@ TEST(persistent_heap, stress_random_vector) {
 
 
 
-TEST(persistent_heap, simple_constructor_and_operator) {
+TEST(persistent_heap, simple_persistence) {
   persistent_heap<int> h1;
   h1.push(5);
   persistent_heap<int> h2(h1);
@@ -97,6 +97,57 @@ TEST(persistent_heap, simple_constructor_and_operator) {
 
 }
 
+
+TEST(persistent_heap, stress_persistence) {
+  persistent_heap<int> h1;
+  std::vector<int> v;
+  int size = 100;
+  for (size_t i = 0; i<size; i++){
+     v.push_back(i);
+  }
+  random_shuffle (v.begin(), v.end());
+  for( auto i : v ) {
+    h1.push(i);
+  }
+  // h1 = [0, 1, .. , 99]
+  persistent_heap<int> h2(h1);
+  // h2 = [0, 1, .. , 99]
+  for(size_t i = 0; i< (size/2); i++) {
+    ASSERT_EQ(i, h2.pop());
+  }
+  // h2 = [50, 51, .. ,99]
+  for (size_t i = size; i < size*2; i++){
+    h2.push(i);
+  }
+  // h2 = [50, 51, .. ,199]
+  persistent_heap<int> h3(h2);
+  // h3 = [50, 51, .. ,199]
+  for(size_t i = (size/2); i< (3*size/2) ; i++) {
+    ASSERT_EQ(i, h2.pop());
+  }
+  // h2 = [150, ... 199]
+  for(size_t i = 0; i< size; i++) {
+    ASSERT_EQ(i, h1.pop());
+  }
+  ASSERT_EQ(1, h1.empty());
+  for( auto i : v ) {
+    h2.push(i);
+  }
+  //h2 = [0, .. , 99, 150, .. , 199]
+  for(size_t i = (size/2); i< 2*size; i++) {
+    ASSERT_EQ(i, h3.pop());
+  }
+  ASSERT_EQ(1, h3.empty());
+
+  for(size_t i = 0; i< size; i++) {
+    ASSERT_EQ(i, h2.pop());
+  }
+
+  for(size_t i = 3*size/2; i< 2*size; i++) {
+    ASSERT_EQ(i, h2.pop());
+  }
+  ASSERT_EQ(1, h2.empty());
+}
 
 
 }
