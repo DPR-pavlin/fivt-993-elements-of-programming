@@ -41,12 +41,13 @@ class static_range_idempotent_query {
     init(begin, end);
   }
 
-  T query(size_t from, size_t to) {
+  T query(size_t from, size_t to) const{
     assert(from < to);
     assert(to <= size_);
     size_t log = integer_part_of_log2(to - from);
-    return idempotent_operation_(sparse_table_[log][from],
-                                 sparse_table_[log][to - (1 << log)]);
+    const std::vector<T>& log_row = sparse_table_[log];
+    return idempotent_operation_(log_row[from],
+                                 log_row[to - (1 << log)]);
   }
 
  private:

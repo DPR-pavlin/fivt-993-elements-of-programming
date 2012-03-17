@@ -11,7 +11,7 @@ namespace stlext {
 
 struct gcd {
 
-  gcd(int a) : fictive(a) {
+  explicit gcd(int a) : fictive(a) {
   }
 
   gcd() {
@@ -19,7 +19,7 @@ struct gcd {
 
   int fictive;
 
-  int operator()(int a, int b) {
+  int operator()(int a, int b) const{
     while (b) {
       a %= b;
       std::swap(a, b);
@@ -30,7 +30,7 @@ struct gcd {
 
 struct comparator_with_costructor {
 
-  comparator_with_costructor(int a) : fictive(a) {
+  explicit comparator_with_costructor(int a) : fictive(a) {
   }
 
   int operator()(const int& a, const int& b) const {
